@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RecentChange from "@/models/RecentChange.model";
-import ErrorDisplay from "@/components/Common/ErrorDisplay";
+import ErrorDisplay from "@/Components/Common/ErrorDisplay";
 import { fetchRecentChanges } from "@/services/recentChanges.service";
 
 export default function HomePage() {
@@ -16,7 +16,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="p-4">
+    <>
       <h1 className="text-2xl font-bold mb-4">Welcome to the Library</h1>
       <ErrorDisplay error={error} />
 
@@ -43,6 +43,6 @@ export default function HomePage() {
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { AppError } from "@/lib/Errors";
+import { AppError } from "@/lib/errors";
 
 interface Props {
   error: Error | null;

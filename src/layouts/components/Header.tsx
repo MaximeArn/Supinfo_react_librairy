@@ -21,8 +21,8 @@ export default function Header() {
         </div>
       </form>
 
-      <div className="flex items-center gap-2 shrink-0">
-        <nav className="hidden md:flex gap-2 text-sm font-medium">
+      <div className="flex items-center shrink-0 gap-10">
+        <nav className="hidden md:flex gap-4 text-sm font-medium ">
           <NavLink
             to="/"
             className={({ isActive }) =>

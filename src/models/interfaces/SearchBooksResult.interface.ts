@@ -8,3 +8,15 @@ export interface ISearchBookResult {
   cover_edition_key?: string;
   publish_year?: number[];
 }
+
+export interface IPaginatedSearchResponse {
+  docs: ISearchBookResult[];
+  numFound: number;
+  start: number;
+}
+
+export interface AdvancedSearchPayload {
+  results: ISearchBookResult[];
+  currentPage: number;
+  totalPages: number;
+}

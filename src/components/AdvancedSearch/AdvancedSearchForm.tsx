@@ -22,8 +22,6 @@ const AdvancedSearchForm = () => {
   const [title, setTitle] = useState(searchParams.get("title") || "");
   const [author, setAuthor] = useState(searchParams.get("author") || "");
   const [subject, setSubject] = useState(searchParams.get("subject") || "");
-  const [place, setPlace] = useState(searchParams.get("place") || "");
-  const [person, setPerson] = useState(searchParams.get("person") || "");
   const [publisher, setPublisher] = useState(
     searchParams.get("publisher") || ""
   );
@@ -33,24 +31,30 @@ const AdvancedSearchForm = () => {
   const [isbn, setIsbn] = useState("");
 
   useEffect(() => {
-    // Re-fill fields if user refreshes or uses back button
     setTitle(searchParams.get("title") || "");
     setAuthor(searchParams.get("author") || "");
     setSubject(searchParams.get("subject") || "");
-    setPlace(searchParams.get("place") || "");
-    setPerson(searchParams.get("person") || "");
     setPublisher(searchParams.get("publisher") || "");
     setIsbn(searchParams.get("isbn") || "");
     setLanguage(searchParams.get("language") || "");
   }, [searchParams]);
+
+  useEffect(() => {
+    const hasParams = Array.from(searchParams.entries()).length > 0;
+    if (hasParams) {
+      const paramsObj: Record<string, string> = {};
+      searchParams.forEach((value, key) => {
+        paramsObj[key] = value;
+      });
+      dispatch(fetchAdvancedSearchResults(paramsObj));
+    }
+  }, [searchParams, dispatch]);
 
   const handleSearch = () => {
     const newParams: Record<string, string> = {};
     if (title) newParams.title = title;
     if (author) newParams.author = author;
     if (subject) newParams.subject = subject;
-    if (place) newParams.place = place;
-    if (person) newParams.person = person;
     if (publisher) newParams.publisher = publisher;
     if (isbn) newParams.isbn = isbn;
     if (language) newParams.language = language;
@@ -66,8 +70,6 @@ const AdvancedSearchForm = () => {
     setTitle("");
     setAuthor("");
     setSubject("");
-    setPlace("");
-    setPerson("");
     setPublisher("");
     setIsbn("");
     setLanguage("");
@@ -99,18 +101,6 @@ const AdvancedSearchForm = () => {
             className="input input-bordered w-full"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-          />
-          <input
-            placeholder="Place"
-            className="input input-bordered w-full"
-            value={place}
-            onChange={(e) => setPlace(e.target.value)}
-          />
-          <input
-            placeholder="Person"
-            className="input input-bordered w-full"
-            value={person}
-            onChange={(e) => setPerson(e.target.value)}
           />
           <input
             placeholder="Publisher"

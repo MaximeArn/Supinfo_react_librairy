@@ -1,11 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { ISearchBookResult } from "@/models/interfaces/SearchBooksResult.interface";
+import type {
+  AdvancedSearchPayload,
+  ISearchBookResult,
+} from "@/models/interfaces/SearchBooksResult.interface";
 import { searchBooks } from "@/services/searchBooks.service";
 
 interface SearchSubState {
   results: ISearchBookResult[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  currentPage: number;
+  totalPages: number;
 }
 
 interface SearchState {
@@ -17,6 +22,8 @@ const initialSubState: SearchSubState = {
   results: [],
   status: "idle",
   error: null,
+  currentPage: 1,
+  totalPages: 1,
 };
 
 const initialState: SearchState = {
@@ -28,24 +35,34 @@ export const fetchQuickSearchResults = createAsyncThunk(
   "search/fetchQuickSearchResults",
   async (query: string, thunkAPI) => {
     try {
-      return await searchBooks(`q=${encodeURIComponent(query)}`);
+      const data = await searchBooks(`&q=${encodeURIComponent(query)}`, 5);
+      return data.docs;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message ?? "Unknown error");
     }
   }
 );
 
-export const fetchAdvancedSearchResults = createAsyncThunk(
-  "search/fetchAdvancedSearchResults",
-  async (params: Record<string, string>, thunkAPI) => {
-    try {
-      const queryString = new URLSearchParams(params).toString();
-      return await searchBooks(queryString);
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.message ?? "Unknown error");
-    }
+export const fetchAdvancedSearchResults = createAsyncThunk<
+  AdvancedSearchPayload,
+  Record<string, string>
+>("search/fetchAdvancedSearchResults", async (params, thunkAPI) => {
+  try {
+    const queryString = new URLSearchParams(params).toString();
+    const data = await searchBooks(queryString, 9);
+
+    const currentPage = parseInt(params.page || "1", 10);
+    const totalPages = Math.ceil(data.numFound / 100);
+
+    return {
+      results: data.docs,
+      currentPage,
+      totalPages,
+    };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(err.message ?? "Unknown error");
   }
-);
+});
 
 const searchSlice = createSlice({
   name: "booksSearch",
@@ -82,7 +99,9 @@ const searchSlice = createSlice({
       })
       .addCase(fetchAdvancedSearchResults.fulfilled, (state, action) => {
         state.advancedSearch.status = "succeeded";
-        state.advancedSearch.results = action.payload;
+        state.advancedSearch.results = action.payload.results;
+        state.advancedSearch.currentPage = action.payload.currentPage;
+        state.advancedSearch.totalPages = action.payload.totalPages;
       })
       .addCase(fetchAdvancedSearchResults.rejected, (state, action) => {
         state.advancedSearch.status = "failed";

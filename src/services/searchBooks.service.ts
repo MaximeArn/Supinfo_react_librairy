@@ -1,10 +1,10 @@
 import { apiFetch } from "@/lib/api";
-import type { ISearchBookResult } from "../models/interfaces/SearchBooksResult.interface";
+import type { IPaginatedSearchResponse } from "@/models/interfaces/SearchBooksResult.interface";
 
 export async function searchBooks(
-  queryString: string
-): Promise<ISearchBookResult[]> {
-  const url = `https://openlibrary.org/search.json?limit=10&${queryString}`;
-  const data = await apiFetch<{ docs: ISearchBookResult[] }>(url);
-  return data.docs;
+  queryString: string,
+  limit: number = 10
+): Promise<IPaginatedSearchResponse> {
+  const url = `https://openlibrary.org/search.json?${queryString}&limit=${limit}`;
+  return await apiFetch<IPaginatedSearchResponse>(url);
 }

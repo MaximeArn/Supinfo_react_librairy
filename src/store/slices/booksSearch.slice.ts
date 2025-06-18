@@ -37,8 +37,9 @@ export const fetchQuickSearchResults = createAsyncThunk(
 
 export const fetchAdvancedSearchResults = createAsyncThunk(
   "search/fetchAdvancedSearchResults",
-  async (queryString: string, thunkAPI) => {
+  async (params: Record<string, string>, thunkAPI) => {
     try {
+      const queryString = new URLSearchParams(params).toString();
       return await searchBooks(queryString);
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.message ?? "Unknown error");

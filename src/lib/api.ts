@@ -5,6 +5,7 @@ export async function apiFetch<T>(
   options?: RequestInit
 ): Promise<T> {
   try {
+    console.log(`request on : ${url}`);
     const res = await fetch(url, options);
 
     if (!res.ok) {

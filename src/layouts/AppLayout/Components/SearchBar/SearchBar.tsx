@@ -1,4 +1,10 @@
-import { useEffect } from "react";
+import {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  forwardRef,
+  type ForwardedRef,
+} from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "@/store/store";
 import { fetchSearchResults } from "@/store/slices/booksSearch.slice";
@@ -9,9 +15,15 @@ interface Props {
   setQuery: (value: string) => void;
 }
 
-export default function SearchBar({ query, setQuery }: Props) {
+const SearchBar = forwardRef(function SearchBar(
+  { query, setQuery }: Props,
+  ref: ForwardedRef<HTMLDivElement>
+) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const localRef = useRef<HTMLDivElement>(null);
+
+  useImperativeHandle(ref, () => localRef.current!);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -31,7 +43,7 @@ export default function SearchBar({ query, setQuery }: Props) {
 
   return (
     <form className="flex-1 max-w-md w-full" onSubmit={handleSubmit}>
-      <div className="form-control w-full relative">
+      <div className="form-control w-full relative" ref={localRef}>
         <input
           type="text"
           placeholder="Search books..."
@@ -42,9 +54,12 @@ export default function SearchBar({ query, setQuery }: Props) {
 
         <SearchBarResults
           query={query}
+          setQuery={setQuery}
           className="hidden md:block absolute top-full w-full"
         />
       </div>
     </form>
   );
-}
+});
+
+export default SearchBar;

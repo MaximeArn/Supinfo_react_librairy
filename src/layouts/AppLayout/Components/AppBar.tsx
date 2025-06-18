@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import ThemeToggler from "./ThemeToggler";
 import SearchBar from "./SearchBar/SearchBar";
@@ -6,6 +6,28 @@ import SearchBarResults from "./SearchBar/SearchBarResults";
 
 export default function Appbar() {
   const [query, setQuery] = useState("");
+
+  const searchBarRef = useRef<HTMLDivElement>(null);
+  const searchResultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node;
+      const clickedOutsideSearchBar =
+        searchBarRef.current && !searchBarRef.current.contains(target);
+      const clickedOutsideResults =
+        searchResultsRef.current && !searchResultsRef.current.contains(target);
+
+      if (clickedOutsideSearchBar && clickedOutsideResults) {
+        setQuery("");
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 navbar bg-base-100 border-b px-4 py-2 flex flex-wrap items-center justify-between gap-4 shadow-sm border-base-300 dark:border-base-content/20">
@@ -16,9 +38,11 @@ export default function Appbar() {
         </span>
       </div>
 
-      <SearchBar query={query} setQuery={setQuery} />
+      <SearchBar ref={searchBarRef} query={query} setQuery={setQuery} />
       <SearchBarResults
-        query={"Plank"}
+        ref={searchResultsRef}
+        query={query}
+        setQuery={setQuery}
         className="md:hidden absolute top-full w-screen left-0"
       />
 

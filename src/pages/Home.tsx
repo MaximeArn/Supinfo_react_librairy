@@ -43,7 +43,7 @@ export default function HomePage() {
     <>
       <PageHeader
         title="Recent changes"
-        description="Explore authors by theme, period, or literary movement."
+        description="Consult recent activity on the library"
       />
 
       {error && <ErrorDisplay error={new Error(error)} />}

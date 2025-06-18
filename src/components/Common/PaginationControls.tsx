@@ -9,25 +9,41 @@ export default function PaginationControls({
   onPageChange,
   isLoading,
 }: PaginationControlsProps) {
+  const handlePrevious = () => {
+    if (currentPage > 1 && !isLoading) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (!isLoading) {
+      onPageChange(currentPage + 1);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center gap-4 mt-6">
-      <button
-        className="btn btn-sm btn-outline"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1 || isLoading}
-      >
-        Previous
-      </button>
+    <div className="flex justify-center mt-6">
+      <div className="join">
+        <button
+          className="join-item btn btn-sm"
+          onClick={handlePrevious}
+          disabled={currentPage === 1 || isLoading}
+        >
+          «
+        </button>
 
-      <span className="text-sm font-medium">Page {currentPage}</span>
+        <button className="join-item btn btn-sm cursor-default" disabled>
+          Page {currentPage}
+        </button>
 
-      <button
-        className="btn btn-sm btn-outline"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={isLoading}
-      >
-        Next
-      </button>
+        <button
+          className="join-item btn btn-sm"
+          onClick={handleNext}
+          disabled={isLoading}
+        >
+          »
+        </button>
+      </div>
     </div>
   );
 }

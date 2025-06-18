@@ -1,4 +1,4 @@
-export interface IRecentChange {
+export interface IRecentChangeJson {
   id: string;
   kind:
     | "register"

@@ -17,7 +17,7 @@ function getBadgeClass(kind: string): string {
   }
 }
 
-export default function RecentChanges({ changes }: Props) {
+export default function RecentChangesList({ changes }: Props) {
   return (
     <div className="w-full">
       <div className="hidden md:block overflow-x-auto rounded-lg border border-base-300 shadow-sm">
@@ -31,7 +31,7 @@ export default function RecentChanges({ changes }: Props) {
           </thead>
           <tbody>
             {changes.map((change) => (
-              <tr key={change.id}>
+              <tr key={crypto.randomUUID()}>
                 <td>
                   <div className="font-semibold">{change.title}</div>
                   <div className="text-xs text-gray-500 font-mono">
@@ -60,7 +60,7 @@ export default function RecentChanges({ changes }: Props) {
       <ul className="md:hidden flex flex-col gap-2 mt-2">
         {changes.map((change) => (
           <li
-            key={change.id}
+            key={crypto.randomUUID()}
             className="border border-base-300 rounded-lg p-3 shadow-sm bg-base-100"
           >
             <div className="flex items-center justify-between gap-2">

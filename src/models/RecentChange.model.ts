@@ -1,6 +1,6 @@
-import type { IRecentChange } from "./interfaces/RecentChange.interface";
+import type { IRecentChangeJson } from "./interfaces/RecentChange.interface";
 
-export default class RecentChange implements IRecentChange {
+export default class RecentChange implements IRecentChangeJson {
   id: string;
   kind: string;
   timestamp: string;
@@ -15,7 +15,7 @@ export default class RecentChange implements IRecentChange {
     [key: string]: unknown;
   };
 
-  constructor(data: IRecentChange) {
+  constructor(data: IRecentChangeJson) {
     this.id = data.id;
     this.kind = data.kind;
     this.timestamp = data.timestamp;

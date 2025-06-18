@@ -57,14 +57,6 @@ export default function Appbar() {
             Home
           </NavLink>
           <NavLink
-            to="/subjects"
-            className={({ isActive }) =>
-              isActive ? "text-primary" : "text-base-content hover:text-primary"
-            }
-          >
-            Subjects
-          </NavLink>
-          <NavLink
             to="/search"
             className={({ isActive }) =>
               isActive ? "text-primary" : "text-base-content hover:text-primary"

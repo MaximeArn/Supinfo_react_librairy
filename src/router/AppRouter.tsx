@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router";
 import AppLayout from "@/layouts/AppLayout/AppLayout";
 import HomePage from "@/pages/Home";
 import SearchPage from "@/pages/Search";
-import SubjectsPage from "@/pages/Authors";
 import BooksDetails from "../pages/BookDetails";
 
 export default function AppRouter() {
@@ -11,7 +10,6 @@ export default function AppRouter() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/subjects" element={<SubjectsPage />} />
         <Route path="/works/:bookId" element={<BooksDetails />} />
       </Route>
     </Routes>

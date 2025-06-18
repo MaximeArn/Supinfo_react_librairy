@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "@/store/store";
-import { fetchSearchResults } from "@/store/slices/booksSearch.slice";
+import { fetchQuickSearchResults } from "@/store/slices/booksSearch.slice";
 import SearchBarResults from "./SearchBarResults";
 
 interface Props {
@@ -28,7 +28,7 @@ const SearchBar = forwardRef(function SearchBar(
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (query.length >= 1) {
-        dispatch(fetchSearchResults(query));
+        dispatch(fetchQuickSearchResults(query));
       }
     }, 300);
     return () => clearTimeout(delayDebounce);

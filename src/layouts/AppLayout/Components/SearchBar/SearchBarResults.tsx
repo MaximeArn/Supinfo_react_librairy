@@ -10,7 +10,9 @@ interface Props {
 
 const SearchBarResults = forwardRef<HTMLDivElement, Props>(
   ({ query, className = "", setQuery }, ref) => {
-    const { results, status } = useAppSelector((state) => state.booksSearch);
+    const { results, status } = useAppSelector(
+      (state) => state.booksSearch.quickSearch
+    );
     const navigate = useNavigate();
     const localRef = useRef<HTMLDivElement>(null);
 

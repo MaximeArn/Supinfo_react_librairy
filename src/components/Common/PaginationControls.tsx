@@ -2,12 +2,14 @@ interface PaginationControlsProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   isLoading: boolean;
+  isLastPage: boolean;
 }
 
 export default function PaginationControls({
   currentPage,
   onPageChange,
   isLoading,
+  isLastPage = false,
 }: PaginationControlsProps) {
   const handlePrevious = () => {
     if (currentPage > 1 && !isLoading) {
@@ -39,7 +41,7 @@ export default function PaginationControls({
         <button
           className="join-item btn btn-sm"
           onClick={handleNext}
-          disabled={isLoading}
+          disabled={isLoading || isLastPage}
         >
           »
         </button>

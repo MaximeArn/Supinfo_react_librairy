@@ -1,34 +1,56 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type {
   AdvancedSearchPayload,
   ISearchBookResult,
 } from "@/models/interfaces/SearchBooksResult.interface";
 import { searchBooks } from "@/services/searchBooks.service";
 
-interface SearchSubState {
+interface AdvancedSearchParams {
+  filters: Record<string, string>;
+}
+
+interface AdvancedSearchState {
   results: ISearchBookResult[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
   currentPage: number;
   totalPages: number;
+  bookPerPage: number;
+}
+
+interface QuickSearchState {
+  results: ISearchBookResult[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
 
 interface SearchState {
-  quickSearch: SearchSubState;
-  advancedSearch: SearchSubState;
+  quickSearch: QuickSearchState;
+  advancedSearch: AdvancedSearchState;
 }
 
-const initialSubState: SearchSubState = {
+const initialAdvancedSearchState: AdvancedSearchState = {
   results: [],
   status: "idle",
   error: null,
   currentPage: 1,
   totalPages: 1,
+  bookPerPage: 9,
+};
+
+const initialQuickSearchState: QuickSearchState = {
+  results: [],
+  status: "idle",
+  error: null,
 };
 
 const initialState: SearchState = {
-  quickSearch: { ...initialSubState },
-  advancedSearch: { ...initialSubState },
+  quickSearch: { ...initialQuickSearchState },
+  advancedSearch: { ...initialAdvancedSearchState },
 };
 
 export const fetchQuickSearchResults = createAsyncThunk(
@@ -45,23 +67,27 @@ export const fetchQuickSearchResults = createAsyncThunk(
 
 export const fetchAdvancedSearchResults = createAsyncThunk<
   AdvancedSearchPayload,
-  Record<string, string>
->("search/fetchAdvancedSearchResults", async (params, thunkAPI) => {
-  try {
-    const queryString = new URLSearchParams(params).toString();
-    const data = await searchBooks(queryString, 9);
+  AdvancedSearchParams,
+  { state: { booksSearch: SearchState } }
+>("search/fetchAdvancedSearchResults", async ({ filters }, thunkAPI) => {
+  const state = thunkAPI.getState().booksSearch.advancedSearch;
+  const page = state.currentPage;
+  const limit = state.bookPerPage;
 
-    const currentPage = parseInt(params.page || "1", 10);
-    const totalPages = Math.ceil(data.numFound / 100);
+  const queryString = new URLSearchParams({
+    ...filters,
+    page: page.toString(),
+  }).toString();
 
-    return {
-      results: data.docs,
-      currentPage,
-      totalPages,
-    };
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.message ?? "Unknown error");
-  }
+  const data = await searchBooks(queryString, limit);
+  const totalPages = Math.ceil(data.numFound / limit);
+
+  return {
+    results: data.docs,
+    currentPage: page,
+    totalPages,
+    totalResults: data.numFound,
+  };
 });
 
 const searchSlice = createSlice({
@@ -69,10 +95,16 @@ const searchSlice = createSlice({
   initialState,
   reducers: {
     clearQuickSearchResults: (state) => {
-      state.quickSearch = { ...initialSubState };
+      state.quickSearch = { ...initialQuickSearchState };
     },
     clearAdvancedSearchResults: (state) => {
-      state.advancedSearch = { ...initialSubState };
+      state.advancedSearch = { ...initialAdvancedSearchState };
+    },
+    setCurrentPage: (state, action) => {
+      state.advancedSearch.currentPage = action.payload;
+    },
+    setBookPerPage: (state, action: PayloadAction<number>) => {
+      state.advancedSearch.bookPerPage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -110,7 +142,11 @@ const searchSlice = createSlice({
   },
 });
 
-export const { clearQuickSearchResults, clearAdvancedSearchResults } =
-  searchSlice.actions;
+export const {
+  clearQuickSearchResults,
+  clearAdvancedSearchResults,
+  setCurrentPage,
+  setBookPerPage,
+} = searchSlice.actions;
 
 export default searchSlice.reducer;

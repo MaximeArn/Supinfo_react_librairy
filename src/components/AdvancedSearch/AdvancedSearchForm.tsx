@@ -46,7 +46,7 @@ const AdvancedSearchForm = () => {
       searchParams.forEach((value, key) => {
         paramsObj[key] = value;
       });
-      dispatch(fetchAdvancedSearchResults(paramsObj));
+      dispatch(fetchAdvancedSearchResults({ filters: paramsObj }));
     }
   }, [searchParams, dispatch]);
 
@@ -63,7 +63,7 @@ const AdvancedSearchForm = () => {
     }
 
     setSearchParams(newParams);
-    dispatch(fetchAdvancedSearchResults(newParams));
+    dispatch(fetchAdvancedSearchResults({ filters: newParams }));
   };
 
   const handleReset = () => {

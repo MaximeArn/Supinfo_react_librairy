@@ -1,4 +1,4 @@
-import { AppError, NetworkError, NotFoundError } from "@/lib/Errors";
+import { AppError, NetworkError, NotFoundError } from "@/lib/errors";
 
 export async function apiFetch<T>(
   url: string,

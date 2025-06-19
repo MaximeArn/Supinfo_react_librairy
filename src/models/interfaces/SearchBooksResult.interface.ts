@@ -9,6 +9,12 @@ export interface ISearchBookResult {
   publish_year?: number[];
 }
 
+export interface AdvancedSearchPayload {
+  results: ISearchBookResult[];
+  currentPage: number;
+  totalPages: number;
+}
+
 export interface IBookDetails {
   key: string;
   title: string;

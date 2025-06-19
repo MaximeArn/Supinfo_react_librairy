@@ -1,15 +1,17 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/store";
 import { useSearchParams } from "react-router";
 import ErrorDisplay from "@/Components/Common/ErrorDisplay";
 import SearchResultCard from "@/Components/AdvancedSearch/AdvancedSearchResultCard";
 import PaginationControls from "@/Components/Common/PaginationControls";
 import {
+  clearAdvancedSearchResults,
   fetchAdvancedSearchResults,
   setBookPerPage,
   setCurrentPage,
 } from "@/store/slices/booksSearch.slice";
 import AdvancedSearchResultSkeleton from "../Skeletons/SearchResultCardSkeleton";
+import { FiInbox, FiSearch } from "react-icons/fi";
 
 const AdvancedSearchResults = () => {
   const { results, status, error, currentPage, bookPerPage } = useAppSelector(
@@ -18,6 +20,12 @@ const AdvancedSearchResults = () => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const scrollTargetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearAdvancedSearchResults());
+    };
+  }, [dispatch]);
 
   const handlePerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPerPage = parseInt(e.target.value);
@@ -62,9 +70,7 @@ const AdvancedSearchResults = () => {
   return (
     <div className="mt-8 " ref={scrollTargetRef}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-base-content">
-          Search results
-        </h2>
+        <h2 className="text-xl font-semibold text-base-content">Results </h2>
         <div className="flex items-center">
           <label htmlFor="perPage" className="mr-2 text-sm">
             Results per page:
@@ -83,6 +89,20 @@ const AdvancedSearchResults = () => {
         </div>
       </div>
 
+      {status === "idle" && (
+        <div className="text-center mt-16 px-4 py-10 bg-base-200 rounded-xl shadow-sm">
+          <FiSearch className="mx-auto text-4xl text-base-content mb-3" />
+          <h3 className="text-xl font-semibold text-base-content mb-2">
+            Start your advanced search
+          </h3>
+          <p className="text-sm text-base-content/70 max-w-md mx-auto">
+            Use the filters above to refine your search and discover books from
+            our digital collection. You can search by title, author, subject,
+            publication year, language and more.
+          </p>
+        </div>
+      )}
+
       {status === "loading" && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: bookPerPage }).map((_, i) => (
@@ -91,10 +111,17 @@ const AdvancedSearchResults = () => {
         </div>
       )}
 
-      {status === "failed" && <ErrorDisplay error={new Error(error || "")} />}
-
       {status === "succeeded" && results.length === 0 && (
-        <p className="text-center mt-8">No results found.</p>
+        <div className="text-center mt-16 px-4 py-10 bg-base-200 rounded-xl shadow-sm">
+          <FiInbox className="mx-auto text-4xl text-base-content mb-3" />
+          <h3 className="text-xl font-semibold text-base-content mb-2">
+            No results found
+          </h3>
+          <p className="text-sm text-base-content/70 max-w-md mx-auto">
+            We couldn’t find any book matching your search criteria. Try
+            adjusting your filters or using different keywords.
+          </p>
+        </div>
       )}
 
       {status === "succeeded" && results.length > 0 && (
@@ -105,12 +132,14 @@ const AdvancedSearchResults = () => {
         </div>
       )}
 
-      <PaginationControls
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-        isLoading={status === "loading"}
-        isLastPage={results.length < bookPerPage}
-      />
+      {results.length > 0 && (
+        <PaginationControls
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+          isLoading={status === "loading"}
+          isLastPage={results.length < bookPerPage}
+        />
+      )}
     </div>
   );
 };

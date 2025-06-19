@@ -2,7 +2,7 @@ interface PaginationControlsProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   isLoading: boolean;
-  isLastPage: boolean;
+  isLastPage?: boolean;
 }
 
 export default function PaginationControls({

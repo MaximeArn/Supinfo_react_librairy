@@ -46,12 +46,32 @@ export default function HomePage() {
         description="Consult recent activity on the library"
       />
 
+      {/* Bloc éditorial */}
+      <section className="bg-gray-50 rounded-xl px-4 py-4 mt-4 mb-6 text-sm sm:text-base text-gray-700 shadow-sm">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
+          📚 Welcome to the Meth Library portal !
+        </h2>
+        <p className="mb-2">
+          Here you’ll find the latest updates to our library’s digital
+          collection. Whether we’ve added a new edition, edited an author’s
+          profile, or reorganized our records — this feed helps you stay
+          informed.
+        </p>
+        <p>
+          Browse the most recent updates below, discover new works, and follow
+          how our library grows over time.
+        </p>
+      </section>
+
+      {/* Section des changements */}
+
       {error && <ErrorDisplay error={new Error(error)} />}
       {loading && <RecentChangesListSkeleton count={limit} />}
-
       {!loading && !error && (
         <RecentChangesList changes={recentChangeInstances} />
       )}
+
+      {/* Pagination */}
       <PaginationControls
         currentPage={currentPage}
         onPageChange={handlePageChange}

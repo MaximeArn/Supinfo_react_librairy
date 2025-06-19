@@ -9,14 +9,24 @@ export interface ISearchBookResult {
   publish_year?: number[];
 }
 
+export interface IBookDetails {
+  key: string;
+  title: string;
+  description?: string | { value: string };
+  covers?: number[];
+  subjects?: string[];
+  subject_places?: string[];
+  subject_times?: string[];
+  authors?: {
+    author: { key: string };
+    type: { key: string };
+  }[];
+  created?: { value: string };
+  last_modified?: { value: string };
+}
+
 export interface IPaginatedSearchResponse {
   docs: ISearchBookResult[];
   numFound: number;
   start: number;
-}
-
-export interface AdvancedSearchPayload {
-  results: ISearchBookResult[];
-  currentPage: number;
-  totalPages: number;
 }

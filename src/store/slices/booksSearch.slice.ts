@@ -7,7 +7,7 @@ import type {
   AdvancedSearchPayload,
   ISearchBookResult,
 } from "@/models/interfaces/SearchBooksResult.interface";
-import { searchBooks } from "@/services/searchBooks.service";
+import { searchBooks } from "@/services/books.service";
 
 interface AdvancedSearchParams {
   filters: Record<string, string>;

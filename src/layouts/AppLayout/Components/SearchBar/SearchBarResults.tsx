@@ -66,7 +66,7 @@ const SearchBarResults = forwardRef<HTMLDivElement, Props>(
           <button
             onClick={() => {
               setQuery("");
-              navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+              navigate(`/search?title=${encodeURIComponent(query.trim())}`);
             }}
             className="w-full text-center py-2 text-primary font-medium hover:bg-base-200"
           >

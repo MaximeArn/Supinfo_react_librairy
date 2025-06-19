@@ -37,7 +37,7 @@ const SearchBar = forwardRef(function SearchBar(
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      navigate(`/search?title=${encodeURIComponent(query.trim())}`);
     }
   };
 

@@ -24,16 +24,15 @@ const AdvancedSearchResults = () => {
     dispatch(setBookPerPage(newPerPage));
     dispatch(setCurrentPage(1));
 
-    const paramsObj: Record<string, string> = {};
-    searchParams.forEach((value, key) => {
-      paramsObj[key] = value;
-    });
+    const hasFilters = Array.from(searchParams.entries()).length > 0;
 
-    dispatch(
-      fetchAdvancedSearchResults({
-        filters: Object.fromEntries(searchParams.entries()),
-      })
-    );
+    if (hasFilters) {
+      dispatch(
+        fetchAdvancedSearchResults({
+          filters: Object.fromEntries(searchParams.entries()),
+        })
+      );
+    }
   };
 
   const handlePageChange = (newPage: number) => {

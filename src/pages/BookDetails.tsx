@@ -13,6 +13,7 @@ import { FaUser } from "react-icons/fa6";
 import BookDetailsSection from "@/Components/BookDetails/BookDetailsSection";
 import BookCoverCarousel from "@/Components/BookDetails/BookCoverCarousel.tsx";
 import BookDetailsSkeleton from "@/Components/Skeletons/BookDetailsContentSkeleton";
+import BookWikipediaSection from "../Components/BookDetails/BookWikipediSection";
 
 export default function BooksDetails() {
   const { bookId } = useParams<{ bookId: string }>();
@@ -90,6 +91,7 @@ export default function BooksDetails() {
             </BookDetailsSection>
           )}
 
+          <BookWikipediaSection bookTitle={book.title} />
           {/* Subject Places */}
           {book.subject_places && book.subject_places.length > 0 && (
             <BookDetailsSection

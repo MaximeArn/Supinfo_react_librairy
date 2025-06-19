@@ -19,7 +19,7 @@ const AdvancedSearchResultCard = ({ book }: Props) => {
     : null;
 
   return (
-    <div className="card card-side bg-base-100 shadow-md min-h-[220px]">
+    <div className="card card-side bg-base-200 shadow-md min-h-[220px]">
       <figure className="w-32 h-[220px] flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden">
         {imageError || !coverUrl ? (
           <div className="h-full w-full bg-gray-200 flex items-center justify-center text-xs text-gray-500 px-2 text-center">

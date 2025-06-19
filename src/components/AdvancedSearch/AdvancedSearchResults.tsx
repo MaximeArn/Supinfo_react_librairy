@@ -63,7 +63,9 @@ const AdvancedSearchResults = () => {
   return (
     <div className="mt-8 " ref={scrollTargetRef}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Search results</h2>
+        <h2 className="text-xl font-semibold text-base-content">
+          Search results
+        </h2>
         <div className="flex items-center">
           <label htmlFor="perPage" className="mr-2 text-sm">
             Results per page:

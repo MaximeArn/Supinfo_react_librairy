@@ -50,37 +50,41 @@ export default function BooksDetails() {
       {!isLoading && error && <p className="text-center text-error">{error}</p>}
 
       {!isLoading && book && (
-        <div className="px-4 sm:px-6 md:px-8 lg:px-12 max-w-screen-xl mx-auto space-y-12">
+        <div className="max-w-screen-xl mx-auto space-y-6">
           {/* Grid: Cover + Description */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
             {book.covers && book.covers.length > 0 && (
-              <div className="lg:col-span-1">
-                <BookCoverCarousel covers={book.covers} />
-              </div>
+              <section className="bg-base-200 border border-base-300 shadow-md rounded-lg h-full flex flex-col">
+                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+                  <h3 className="text-xl font-semibold mb-4 text-base-content flex items-center gap-2">
+                    <HiOutlineBookOpen className="text-base-content" />
+                    Covers
+                  </h3>
+                  <BookCoverCarousel covers={book.covers} />
+                </div>
+              </section>
             )}
 
             {book.description && (
-              <div className="lg:col-span-2">
-                <section className="bg-base-100/80 border border-base-300 shadow-md shadow-base-200/30 rounded-2xl backdrop-blur-sm">
-                  <div className="p-6 sm:p-8">
-                    <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
-                      <HiOutlineBookOpen className="text-base-content" />
-                      Description
-                    </h3>
-                    <p className="text-base-content text-base leading-relaxed">
-                      {typeof book.description === "string"
-                        ? book.description
-                        : book.description.value}
-                    </p>
-                  </div>
-                </section>
-              </div>
+              <section className="bg-base-200 border border-base-300 shadow-md rounded-lg h-full flex flex-col">
+                <div className="p-6 sm:p-8 flex-1">
+                  <h3 className="text-xl font-semibold mb-4 text-base-content flex items-center gap-2">
+                    <HiOutlineBookOpen className="text-base-content" />
+                    Description
+                  </h3>
+                  <p className="text-base-content text-base leading-relaxed">
+                    {typeof book.description === "string"
+                      ? book.description
+                      : book.description.value}
+                  </p>
+                </div>
+              </section>
             )}
           </div>
 
           {/* Author */}
           {book.authors && book.authors.length > 0 && (
-            <section className="bg-base-100/80 border border-base-300 shadow-md shadow-base-200/30 rounded-2xl backdrop-blur-sm">
+            <section className="bg-base-200 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
               <div className="p-6 sm:p-8">
                 <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
                   <FaUser className="text-base-content" />
@@ -95,7 +99,7 @@ export default function BooksDetails() {
 
           {/* Subject Places */}
           {book.subject_places && book.subject_places.length > 0 && (
-            <section className="bg-base-100/80 border border-base-300 shadow-md shadow-base-200/30 rounded-2xl backdrop-blur-sm">
+            <section className="bg-base-200/80 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
               <div className="p-6 sm:p-8">
                 <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
                   <HiOutlineMapPin className="text-green-600" />
@@ -117,7 +121,7 @@ export default function BooksDetails() {
 
           {/* Subject Times */}
           {book.subject_times && book.subject_times.length > 0 && (
-            <section className="bg-base-100/80 border border-base-300 shadow-md shadow-base-200/30 rounded-2xl backdrop-blur-sm">
+            <section className="bg-base-200/80 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
               <div className="p-6 sm:p-8">
                 <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
                   <HiOutlineClock className="text-purple-600" />

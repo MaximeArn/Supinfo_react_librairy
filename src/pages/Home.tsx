@@ -46,7 +46,6 @@ export default function HomePage() {
         description="Consult recent activity on the library"
       />
 
-      {/* Bloc éditorial */}
       <section className="bg-gray-50 rounded-xl px-4 py-4 mt-4 mb-6 text-sm sm:text-base text-gray-700 shadow-sm">
         <h2 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">
           📚 Welcome to the Meth Library portal !
@@ -63,15 +62,12 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Section des changements */}
-
       {error && <ErrorDisplay error={new Error(error)} />}
       {loading && <RecentChangesListSkeleton count={limit} />}
       {!loading && !error && (
         <RecentChangesList changes={recentChangeInstances} />
       )}
 
-      {/* Pagination */}
       <PaginationControls
         currentPage={currentPage}
         onPageChange={handlePageChange}

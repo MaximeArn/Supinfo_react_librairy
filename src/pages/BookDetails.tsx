@@ -10,7 +10,9 @@ import {
   HiOutlineClock,
 } from "react-icons/hi2";
 import { FaUser } from "react-icons/fa6";
-import BookCoverCarousel from "../Components/BookDetails/BookCoverCarousel.tsx";
+import BookDetailsSection from "@/Components/BookDetails/BookDetailsSection";
+import BookCoverCarousel from "@/Components/BookDetails/BookCoverCarousel.tsx";
+import BookDetailsSkeleton from "@/Components/Skeletons/BookDetailsContentSkeleton";
 
 export default function BooksDetails() {
   const { bookId } = useParams<{ bookId: string }>();
@@ -46,7 +48,7 @@ export default function BooksDetails() {
         description="Detailed information about a book"
       />
 
-      {isLoading && <p className="text-center">Loading...</p>}
+      {isLoading && <BookDetailsSkeleton />}
       {!isLoading && error && <p className="text-center text-error">{error}</p>}
 
       {!isLoading && book && (
@@ -54,91 +56,76 @@ export default function BooksDetails() {
           {/* Grid: Cover + Description */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
             {book.covers && book.covers.length > 0 && (
-              <section className="bg-base-200 border border-base-300 shadow-md rounded-lg h-full flex flex-col">
-                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
-                  <h3 className="text-xl font-semibold mb-4 text-base-content flex items-center gap-2">
-                    <HiOutlineBookOpen className="text-base-content" />
-                    Covers
-                  </h3>
-                  <BookCoverCarousel covers={book.covers} />
-                </div>
-              </section>
+              <BookDetailsSection
+                icon={<HiOutlineBookOpen className="text-base-content" />}
+                title="Covers"
+              >
+                <BookCoverCarousel covers={book.covers} />
+              </BookDetailsSection>
             )}
 
             {book.description && (
-              <section className="bg-base-200 border border-base-300 shadow-md rounded-lg h-full flex flex-col">
-                <div className="p-6 sm:p-8 flex-1">
-                  <h3 className="text-xl font-semibold mb-4 text-base-content flex items-center gap-2">
-                    <HiOutlineBookOpen className="text-base-content" />
-                    Description
-                  </h3>
-                  <p className="text-base-content text-base leading-relaxed">
-                    {typeof book.description === "string"
-                      ? book.description
-                      : book.description.value}
-                  </p>
-                </div>
-              </section>
+              <BookDetailsSection
+                icon={<HiOutlineBookOpen className="text-base-content" />}
+                title="Description"
+              >
+                <p className="text-base-content text-base leading-relaxed">
+                  {typeof book.description === "string"
+                    ? book.description
+                    : book.description.value}
+                </p>
+              </BookDetailsSection>
             )}
           </div>
 
           {/* Author */}
           {book.authors && book.authors.length > 0 && (
-            <section className="bg-base-200 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
-                  <FaUser className="text-base-content" />
-                  Author
-                </h3>
-                <BookAuthorInfos
-                  authorId={book.authors[0].author.key.split("/").pop()!}
-                />
-              </div>
-            </section>
+            <BookDetailsSection
+              icon={<FaUser className="text-base-content" />}
+              title="Author"
+            >
+              <BookAuthorInfos
+                authorId={book.authors[0].author.key.split("/").pop()!}
+              />
+            </BookDetailsSection>
           )}
 
           {/* Subject Places */}
           {book.subject_places && book.subject_places.length > 0 && (
-            <section className="bg-base-200/80 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
-                  <HiOutlineMapPin className="text-green-600" />
-                  Places
-                </h3>
-                <ul className="flex flex-wrap gap-2">
-                  {book.subject_places.map((p) => (
-                    <li
-                      key={p}
-                      className="bg-green-100 text-green-800 px-3 py-1 text-sm rounded-full whitespace-nowrap"
-                    >
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
+            <BookDetailsSection
+              icon={<HiOutlineMapPin className="text-green-600" />}
+              title="Places"
+            >
+              <ul className="flex flex-wrap gap-2">
+                {book.subject_places.map((p) => (
+                  <li
+                    key={p}
+                    className="bg-green-100 text-green-800 px-3 py-1 text-sm rounded-full whitespace-nowrap"
+                  >
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </BookDetailsSection>
           )}
 
           {/* Subject Times */}
           {book.subject_times && book.subject_times.length > 0 && (
-            <section className="bg-base-200/80 border border-base-300 shadow-md shadow-base-200/30 rounded-lg backdrop-blur-sm">
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl font-semibold mb-3 text-base-content flex items-center gap-2">
-                  <HiOutlineClock className="text-purple-600" />
-                  Periods
-                </h3>
-                <ul className="flex flex-wrap gap-2">
-                  {book.subject_times.map((t) => (
-                    <li
-                      key={t}
-                      className="bg-purple-100 text-purple-800 px-3 py-1 text-sm rounded-full whitespace-nowrap"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
+            <BookDetailsSection
+              icon={<HiOutlineClock className="text-purple-600" />}
+              title="Periods"
+            >
+              <ul className="flex flex-wrap gap-2">
+                {book.subject_times.map((t) => (
+                  <li
+                    key={t}
+                    className="bg-purple-100 text-purple-800 px-3 py-1 text-sm rounded-full whitespace-nowrap"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </BookDetailsSection>
           )}
         </div>
       )}

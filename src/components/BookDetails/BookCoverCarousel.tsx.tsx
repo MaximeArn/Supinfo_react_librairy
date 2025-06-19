@@ -7,6 +7,7 @@ interface BookCoverCarouselProps {
 export default function BookCoverCarousel({ covers }: BookCoverCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const container = carouselRef.current;
@@ -18,11 +19,10 @@ export default function BookCoverCarousel({ covers }: BookCoverCarouselProps) {
       const index = Math.round(scrollLeft / itemWidth);
       setVisibleIndex(index);
     };
+
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
-
-  if (!covers.length) return null;
 
   const scrollBy = (direction: "left" | "right") => {
     const container = carouselRef.current;
@@ -36,6 +36,10 @@ export default function BookCoverCarousel({ covers }: BookCoverCarouselProps) {
     });
   };
 
+  const handleImageLoad = (coverId: number) => {
+    setLoadedImages((prev) => ({ ...prev, [coverId]: true }));
+  };
+
   return (
     <div className="relative w-full">
       <div
@@ -47,11 +51,19 @@ export default function BookCoverCarousel({ covers }: BookCoverCarouselProps) {
             key={coverId}
             className="carousel-item w-full flex justify-center items-center shrink-0"
           >
-            <img
-              src={`https://covers.openlibrary.org/b/id/${coverId}-L.jpg`}
-              alt={`Cover ${index + 1}`}
-              className="w-auto h-[400px] object-contain"
-            />
+            <div className="relative w-[280px] h-[400px] flex justify-center items-center">
+              {!loadedImages[coverId] && (
+                <div className="absolute inset-0 bg-base-300 animate-pulse rounded" />
+              )}
+              <img
+                src={`https://covers.openlibrary.org/b/id/${coverId}-L.jpg`}
+                alt={`Cover ${index + 1}`}
+                className={`w-full h-full object-contain transition-opacity duration-300 rounded ${
+                  loadedImages[coverId] ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() => handleImageLoad(coverId)}
+              />
+            </div>
           </div>
         ))}
       </div>
